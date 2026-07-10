@@ -1,5 +1,5 @@
-﻿Source: lingmo-widgets
-Section: libs
+Source: lingmo-widgets
+Section: utils
 Priority: optional
 Maintainer: Lingmo OS Team <team@lingmo.org>
 Build-Depends:
@@ -7,23 +7,12 @@ Build-Depends:
     debhelper-compat (= 13),
     pkg-config,
     qt6-base-dev (>= 6.5),
-    qt6-base-dev, libkf6windowystem-dev,
 Standards-Version: 4.6.2
 Homepage: https://github.com/Matrinsoft/lingmo-widgets
 Rules-Requires-Root: no
 
-Package: liblingmo-widgets1
+Package: lingmo-widgets
 Architecture: any
-Depends:
-    ,
-    ,
-Description: Lingmo Widgets Style
- Lingmo Desktop Lingmo Widgets Style.
-
-Package: liblingmo-widgets-dev
-Architecture: any
-Depends:
-    liblingmo-widgets1 (= ),
-    ,
-Description: Lingmo Widgets Style - development files
- This package contains the development files.
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: lingmo-widgets
+ Lingmo Desktop lingmo-widgets.
