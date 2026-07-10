@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2020 Reven Martin
  * Copyright (C) 2020 KeePassXC Team <team@keepassxc.org>
  * Copyright (C) 2019 Andrew Richards
@@ -3112,7 +3112,7 @@ void BaseStyle::drawControl(ControlElement element,
         }
 
         // Draw main text and mnemonic text
-        QStringRef s(&menuItem->text);
+        QStringView s(menuItem->text);
         if (!s.isEmpty()) {
             QRect textRect =
                 Ph::menuItemTextRect(metrics, option->direction, itemRect, hasSubMenu, hasIcon, menuItem->tabWidth);
@@ -3175,14 +3175,12 @@ void BaseStyle::drawControl(ControlElement element,
             if (t >= 0) {
                 QRect mnemonicR =
                     Ph::menuItemMnemonicRect(metrics, option->direction, itemRect, hasSubMenu, menuItem->tabWidth);
-                const QStringRef textToDrawRef = s.mid(t + 1);
-                const QString unsafeTextToDraw = QString::fromRawData(textToDrawRef.constData(), textToDrawRef.size());
-                painter->drawText(mnemonicR, text_flags, unsafeTextToDraw);
+                const QString textToDraw = s.mid(t + 1).toString();
+                painter->drawText(mnemonicR, text_flags, textToDraw);
                 s = s.left(t);
             }
-            const QStringRef textToDrawRef = s.left(t);
-            const QString unsafeTextToDraw = QString::fromRawData(textToDrawRef.constData(), textToDrawRef.size());
-            painter->drawText(textRect, text_flags, unsafeTextToDraw);
+            const QString textToDraw = s.left(t).toString();
+            painter->drawText(textRect, text_flags, textToDraw);
         }
 
         // SubMenu Arrow
