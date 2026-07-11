@@ -18,16 +18,8 @@ find_package(Qt6Gui CONFIG REQUIRED)
 # Optional Qt6 modules
 find_package(Qt6QuickControls2 QUIET)
 
-# KDE/Framework dependencies - all optional, build what we can
-find_package(Qt6XdgIconLoader QUIET)
-find_package(Qt5XdgIconLoader QUIET)
-find_package(dbusmenu-qt6 QUIET)
-find_package(dbusmenu-qt5 QUIET)
-find_package(KF6WindowSystem QUIET)
-find_package(KF5WindowSystem QUIET)
-
-# qdbusmenubar uses them
-remove_definitions(-DQT_NO_SIGNALS_SLOTS_KEYWORDS)
+# KDE Framework 6 dependencies
+find_package(KF6WindowSystem REQUIRED)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(XCB_EWMH REQUIRED xcb xcb-ewmh x11)
@@ -66,29 +58,17 @@ target_compile_definitions(lingmoplatformtheme
         "LIB_FM_QT_SONAME=\"${LIB_FM_QT_SONAME}\""
 )
 
-# Build link libraries list
 set(_LINK_LIBS
     Qt6::GuiPrivate
     Qt6::Widgets
     Qt6::Core
     Qt6::DBus
+    KF6::WindowSystem
     ${XCB_EWMH_LIBRARIES}
 )
 
 if(Qt6QuickControls2_FOUND)
     list(APPEND _LINK_LIBS Qt6::QuickControls2)
-endif()
-
-if(dbusmenu-qt6_FOUND)
-    list(APPEND _LINK_LIBS dbusmenu-qt6)
-elseif(dbusmenu-qt5_FOUND)
-    list(APPEND _LINK_LIBS dbusmenu-qt5)
-endif()
-
-if(KF6WindowSystem_FOUND)
-    list(APPEND _LINK_LIBS KF6::WindowSystem)
-elseif(KF5WindowSystem_FOUND)
-    list(APPEND _LINK_LIBS KF5::WindowSystem)
 endif()
 
 target_link_libraries(lingmoplatformtheme PRIVATE ${_LINK_LIBS})
@@ -102,7 +82,6 @@ if(NOT QT_QMAKE_EXECUTABLE)
     message(FATAL_ERROR "qmake is not found.")
 endif()
 
-# execute the command "qmake -query QT_INSTALL_PLUGINS" to get the path of plugins dir.
 execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
     OUTPUT_VARIABLE QT_PLUGINS_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE

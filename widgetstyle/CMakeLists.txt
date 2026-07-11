@@ -12,9 +12,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_S
 set(QT Core Gui Widgets DBus)
 find_package(Qt6 REQUIRED ${QT})
 find_package(PkgConfig REQUIRED)
-
-find_package(KF6WindowSystem QUIET)
-find_package(KF5WindowSystem QUIET)
+find_package(KF6WindowSystem REQUIRED)
 
 include(ECMQueryQt)
 
@@ -37,21 +35,14 @@ set(SRCS
 
 add_library(${TARGET} MODULE ${SRCS})
 
-set(_LINK_LIBS
+target_link_libraries(${TARGET}
     Qt6::GuiPrivate
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
     Qt6::DBus
+    KF6::WindowSystem
 )
-
-if(KF6WindowSystem_FOUND)
-    list(APPEND _LINK_LIBS KF6::WindowSystem)
-elseif(KF5WindowSystem_FOUND)
-    list(APPEND _LINK_LIBS KF5::WindowSystem)
-endif()
-
-target_link_libraries(${TARGET} ${_LINK_LIBS})
 
 ecm_query_qt(CMAKE_INSTALL_QTPLUGINDIR QT_INSTALL_PLUGINS)
 
