@@ -1,4 +1,4 @@
-﻿### configuration plugin
+### configuration plugin
 add_definitions(-DTRANSLATION_DOMAIN=\"ocean_style_config\")
 set(kstyle_ocean_config_PART_SRCS oceanstyleconfig.cpp)
 
@@ -19,17 +19,12 @@ install(TARGETS kstyle_ocean_config DESTINATION ${QT_PLUGIN_INSTALL_DIR})
 install(FILES oceanstyleconfig.desktop DESTINATION  ${SERVICES_INSTALL_DIR})
 
 ########### next target ###############
-find_package(KF5KCMUtils CONFIG)
-set_package_properties(KF5KCMUtils PROPERTIES
-    DESCRIPTION "KF5 KCM utils Framework"
-    URL "https://projects.kde.org/projects/frameworks/kcmutils"
-    TYPE OPTIONAL
-    PURPOSE "Required for ocean-settings5 application to build")
+find_package(KF6KCMUtils QUIET CONFIG)
 
-if( KF5KCMUtils_FOUND )
+if(KF6KCMUtils_FOUND)
     set(ocean_settings_SOURCES main.cpp)
-    add_executable(ocean-settings5 ${ocean_settings_SOURCES} )
-    target_link_libraries(ocean-settings5 Qt6::Core Qt6::Gui Qt6::Widgets )
+    add_executable(ocean-settings5 ${ocean_settings_SOURCES})
+    target_link_libraries(ocean-settings5 Qt6::Core Qt6::Gui Qt6::Widgets)
     target_link_libraries(ocean-settings5 KF6::I18n KF6::KCMUtils)
 
     install(TARGETS ocean-settings5 ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -37,5 +32,5 @@ if( KF5KCMUtils_FOUND )
     # icon
     ecm_install_icons(ICONS sc-apps-ocean-settings.svgz
         DESTINATION ${ICON_INSTALL_DIR}
-        THEME hicolor )
+        THEME hicolor)
 endif()
