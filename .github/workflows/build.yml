@@ -1,4 +1,4 @@
-﻿name: Build
+name: Build
 on:
   push:
     branches: [main, develop]
@@ -13,7 +13,16 @@ jobs:
         run: apt-get update -qq && apt-get install -y -qq git
       - uses: actions/checkout@v4
       - name: Install system dependencies
-        run: apt-get update -qq && apt-get install -y -qq cmake ninja-build g++ qt6-base-dev
+        run: |
+          apt-get update -qq && apt-get install -y -qq \
+            cmake ninja-build g++ \
+            qt6-base-dev qt6-declarative-dev qt6-tools-dev \
+            extra-cmake-modules \
+            libkf6windowsystem-dev libkf6i18n-dev libkf6config-dev \
+            libkf6guiaddons-dev libkf6iconthemes-dev libkf6configwidgets-dev \
+            libkf6kcmutils-dev libkf6integration-dev libkf6waylandclient-dev \
+            libxcb1-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-xfixes0-dev \
+            pkg-config
       - name: Configure
         run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - name: Build
