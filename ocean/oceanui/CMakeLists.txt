@@ -1,17 +1,44 @@
-﻿################# Qt/KDE #################
+################# Qt/KDE #################
 find_package(Qt6 REQUIRED CONFIG COMPONENTS Widgets DBus)
-find_package(KF6 REQUIRED COMPONENTS
-    I18n
-    Config
-    GuiAddons
-    IconThemes
-    ConfigWidgets
-    WindowSystem)
+
+# Try KF6 first, fall back to KF5
+find_package(KF6I18n QUIET)
+if(NOT KF6I18n_FOUND)
+    find_package(KF5I18n REQUIRED)
+endif()
+
+find_package(KF6Config QUIET)
+if(NOT KF6Config_FOUND)
+    find_package(KF5Config REQUIRED)
+endif()
+
+find_package(KF6GuiAddons QUIET)
+if(NOT KF6GuiAddons_FOUND)
+    find_package(KF5GuiAddons REQUIRED)
+endif()
+
+find_package(KF6IconThemes QUIET)
+if(NOT KF6IconThemes_FOUND)
+    find_package(KF5IconThemes REQUIRED)
+endif()
+
+find_package(KF6ConfigWidgets QUIET)
+if(NOT KF6ConfigWidgets_FOUND)
+    find_package(KF5ConfigWidgets REQUIRED)
+endif()
+
+find_package(KF6WindowSystem QUIET)
+if(NOT KF6WindowSystem_FOUND)
+    find_package(KF5WindowSystem REQUIRED)
+endif()
 
 find_package(Qt6 COMPONENTS Quick)
 set(OCEAN_HAVE_QTQUICK ${Qt6Quick_FOUND})
 
-find_package( KF5FrameworkIntegration CONFIG )
+find_package(KF6FrameworkIntegration QUIET CONFIG)
+if(NOT KF6FrameworkIntegration_FOUND)
+    find_package(KF5FrameworkIntegration CONFIG)
+endif()
 set_package_properties(KF5FrameworkIntegration PROPERTIES
     DESCRIPTION "KF6 Framework Integration"
     URL "https://projects.kde.org/projects/frameworks/frameworkintegration"
@@ -28,14 +55,14 @@ set_package_properties(XCB PROPERTIES
     PURPOSE "Required to pass style properties to native Windows on X11 Platform"
 )
 
-find_package(KF5Wayland CONFIG)
+find_package(KF6Wayland QUIET CONFIG)
+if(NOT KF6Wayland_FOUND)
+    find_package(KF5Wayland CONFIG)
+endif()
 set(OCEAN_HAVE_KWAYLAND ${KF5Wayland_FOUND})
 
 if(UNIX AND NOT APPLE)
     set(OCEAN_HAVE_X11 ${XCB_XCB_FOUND})
-    if (XCB_XCB_FOUND)
-        find_package(Qt6 REQUIRED CONFIG COMPONENTS )
-    endif()
 else()
     set(OCEAN_HAVE_X11 FALSE)
 endif()
@@ -98,30 +125,42 @@ set(ocean_PART_SRCS
 
 kconfig_add_kcfg_files(ocean_PART_SRCS oceanstyleconfigdata.kcfgc)
 add_library(ocean MODULE ${ocean_PART_SRCS})
-target_link_libraries(ocean Qt6::Core Qt6::Gui Qt6::Widgets Qt6::DBus)
-if( OCEAN_HAVE_QTQUICK )
-    target_link_libraries(ocean Qt6::Quick)
+
+set(_OCEAN_LINK_LIBS Qt6::Core Qt6::Gui Qt6::Widgets Qt6::DBus)
+
+if(OCEAN_HAVE_QTQUICK)
+    list(APPEND _OCEAN_LINK_LIBS Qt6::Quick)
 endif()
-target_link_libraries(ocean KF6::ConfigCore KF6::ConfigWidgets KF6::GuiAddons KF6::IconThemes KF6::WindowSystem)
-target_link_libraries(ocean oceancommon5)
+
+# KF6 or KF5 libraries
+if(KF6Config_FOUND)
+    list(APPEND _OCEAN_LINK_LIBS KF6::ConfigCore KF6::ConfigWidgets KF6::GuiAddons KF6::IconThemes KF6::WindowSystem)
+else()
+    list(APPEND _OCEAN_LINK_LIBS KF5::ConfigCore KF5::ConfigWidgets KF5::GuiAddons KF5::IconThemes KF5::WindowSystem)
+endif()
+
+list(APPEND _OCEAN_LINK_LIBS oceancommon5)
 
 if(KF5FrameworkIntegration_FOUND)
-    target_link_libraries(ocean KF6::Style)
+    list(APPEND _OCEAN_LINK_LIBS KF6::Style)
 endif()
 
+target_link_libraries(ocean ${_OCEAN_LINK_LIBS})
+
 if (WIN32)
-    # As stated in https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants M_PI only gets defined
-    # when if _USE_MATH_DEFINES is defined
     target_compile_definitions(ocean PRIVATE _USE_MATH_DEFINES _BSD_SOURCE)
 endif()
 
 if(OCEAN_HAVE_X11)
     target_link_libraries(ocean ${XCB_LIBRARIES})
-    target_link_libraries(ocean Qt6::)
 endif()
 
 if(OCEAN_HAVE_KWAYLAND)
-    target_link_libraries(ocean KF6::WaylandClient)
+    if(KF6Wayland_FOUND)
+        target_link_libraries(ocean KF6::WaylandClient)
+    else()
+        target_link_libraries(ocean KF5::WaylandClient)
+    endif()
 endif()
 
 

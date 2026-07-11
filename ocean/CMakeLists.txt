@@ -4,13 +4,12 @@ project(lingmo-kstyle VERSION 0.43.0 DESCRIPTION "Lingmo KStyle" LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(KF5_MIN_VERSION "5.78.0")
-
 include(GenerateExportHeader)
 include(WriteBasicConfigVersionFile)
 include(FeatureSummary)
 
-find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+# Try KF6 first, fall back to KF5
+find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake)
 
 include(ECMInstallIcons)
@@ -21,17 +20,10 @@ include(KDEClangFormat)
 
 include(GtkUpdateIconCache)
 
-# option(WITH_DECORATIONS "Build Ocean window decorations for KWin" ON)
-# if(WITH_DECORATIONS)
-#     find_package(KDecoration2 REQUIRED)
-#     add_subdirectory(kdecoration)
-# endif()
-
 add_subdirectory(colors)
 add_subdirectory(liboceancommon)
 add_subdirectory(oceanui)
 add_subdirectory(misc)
-
 
 include(ECMSetupVersion)
 ecm_setup_version(${PROJECT_VERSION} VARIABLE_PREFIX OCEAN
