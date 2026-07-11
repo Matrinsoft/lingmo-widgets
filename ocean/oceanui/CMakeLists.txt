@@ -2,8 +2,7 @@
 find_package(Qt6 REQUIRED CONFIG COMPONENTS Widgets DBus)
 
 # KDE Framework 6 dependencies
-find_package(KF6 REQUIRED COMPONENTS I18n Config GuiAddons IconThemes ConfigWidgets)
-find_package(KF6WindowSystem QUIET)
+find_package(KF6 REQUIRED COMPONENTS I18n Config GuiAddons IconThemes ConfigWidgets WindowSystem)
 
 find_package(Qt6 COMPONENTS Quick)
 set(LINGMO_HAVE_QTQUICK ${Qt6Quick_FOUND})
@@ -90,11 +89,8 @@ set(_LINK_LIBS
     KF6::ConfigWidgets
     KF6::GuiAddons
     KF6::IconThemes
+    KF6::WindowSystem
 )
-
-if(KF6WindowSystem_FOUND)
-    list(APPEND _LINK_LIBS KF6::WindowSystem)
-endif()
 
 if(LINGMO_HAVE_QTQUICK)
     list(APPEND _LINK_LIBS Qt6::Quick)

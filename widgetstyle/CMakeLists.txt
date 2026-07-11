@@ -13,11 +13,7 @@ set(QT Core Gui Widgets DBus)
 find_package(Qt6 REQUIRED ${QT})
 find_package(PkgConfig REQUIRED)
 
-find_package(KF6WindowSystem QUIET)
-if(NOT KF6WindowSystem_FOUND)
-    message(STATUS "KF6WindowSystem not found, skipping lingmostyle")
-    return()
-endif()
+find_package(KF6WindowSystem REQUIRED)
 
 include(ECMQueryQt)
 
