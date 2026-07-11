@@ -14,9 +14,7 @@ find_package(Qt6 REQUIRED ${QT})
 find_package(PkgConfig REQUIRED)
 
 find_package(KF6WindowSystem QUIET)
-if(NOT KF6WindowSystem_FOUND)
-    find_package(KF5WindowSystem REQUIRED)
-endif()
+find_package(KF5WindowSystem QUIET)
 
 include(ECMQueryQt)
 

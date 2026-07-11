@@ -11,26 +11,20 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 find_package(Qt6Core REQUIRED)
 find_package(Qt6Widgets REQUIRED)
-find_package(Qt6QuickControls2 QUIET)
 find_package(Qt6DBus REQUIRED)
 find_package(Qt6 REQUIRED)
 find_package(Qt6Gui CONFIG REQUIRED)
 
-# KDE/Framework dependencies - try Qt6/KF6 variants first, fall back to Qt5/KF5
+# Optional Qt6 modules
+find_package(Qt6QuickControls2 QUIET)
+
+# KDE/Framework dependencies - all optional, build what we can
 find_package(Qt6XdgIconLoader QUIET)
-if(NOT Qt6XdgIconLoader_FOUND)
-    find_package(Qt5XdgIconLoader QUIET)
-endif()
-
+find_package(Qt5XdgIconLoader QUIET)
 find_package(dbusmenu-qt6 QUIET)
-if(NOT dbusmenu-qt6_FOUND)
-    find_package(dbusmenu-qt5 QUIET)
-endif()
-
+find_package(dbusmenu-qt5 QUIET)
 find_package(KF6WindowSystem QUIET)
-if(NOT KF6WindowSystem_FOUND)
-    find_package(KF5WindowSystem REQUIRED)
-endif()
+find_package(KF5WindowSystem QUIET)
 
 # qdbusmenubar uses them
 remove_definitions(-DQT_NO_SIGNALS_SLOTS_KEYWORDS)

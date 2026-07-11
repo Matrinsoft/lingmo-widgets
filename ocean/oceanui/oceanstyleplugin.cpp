@@ -29,7 +29,7 @@ namespace Ocean
     //_________________________________________________
     QStyle* StylePlugin::create( const QString &key )
     {
-        if( key.toLower() == QStringLiteral( "ocean" ) )
+        if( key.toLower() == QStringLiteral( "lingmo" ) )
         {
             return new Style;
         }
@@ -38,6 +38,6 @@ namespace Ocean
 
     //_________________________________________________
     QStringList StylePlugin::keys() const
-    { return QStringList( QStringLiteral( "Ocean" ) ); }
+    { return QStringList( QStringLiteral( "lingmo" ) ); }
 
 }
