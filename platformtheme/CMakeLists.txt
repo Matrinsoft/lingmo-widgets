@@ -19,7 +19,11 @@ find_package(Qt6Gui CONFIG REQUIRED)
 find_package(Qt6QuickControls2 QUIET)
 
 # KDE Framework 6 dependencies
-find_package(KF6WindowSystem REQUIRED)
+find_package(KF6WindowSystem QUIET)
+if(NOT KF6WindowSystem_FOUND)
+    message(STATUS "KF6WindowSystem not found, skipping lingmo-platformtheme")
+    return()
+endif()
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(XCB_EWMH REQUIRED xcb xcb-ewmh x11)

@@ -12,7 +12,12 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_S
 set(QT Core Gui Widgets DBus)
 find_package(Qt6 REQUIRED ${QT})
 find_package(PkgConfig REQUIRED)
-find_package(KF6WindowSystem REQUIRED)
+
+find_package(KF6WindowSystem QUIET)
+if(NOT KF6WindowSystem_FOUND)
+    message(STATUS "KF6WindowSystem not found, skipping lingmostyle")
+    return()
+endif()
 
 include(ECMQueryQt)
 
