@@ -20,7 +20,7 @@ jobs:
             extra-cmake-modules \
             libkf6windowsystem-dev libkf6i18n-dev libkf6config-dev \
             libkf6guiaddons-dev libkf6iconthemes-dev libkf6configwidgets-dev \
-            libkf6kcmutils-dev libkf6integration-dev libkf6waylandclient-dev \
+            libkf6kcmutils-dev \
             libxcb1-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-xfixes0-dev \
             pkg-config
       - name: Configure
